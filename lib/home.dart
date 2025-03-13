@@ -1,3 +1,4 @@
+import 'package:deck_of_cards/custom_button.dart';
 import 'package:flutter/material.dart';
 
 import 'random_cart_page.dart';
@@ -7,10 +8,10 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF121212), // Set background color
+      backgroundColor: Color(0xFFF3F4F7), // Set background color
       appBar: AppBar(
-        backgroundColor: Color(0xFF121212), // Set background color
-        title: Text('Deck Of Cards', style: TextStyle(color: Colors.white)),
+        backgroundColor: Color(0xFFF3F4F7), // Set background color
+        title: Text('Deck Of Cards', style: TextStyle(color: Colors.black)),
       ),
       body: Center(
         child: Column(
@@ -19,9 +20,7 @@ class HomePage extends StatelessWidget {
             // Display the PNG image
             Image.asset('assets/home.png'), // Update with your image path
             SizedBox(height: 20), // Space between image and button
-
-            // Start button
-            ElevatedButton(
+            CustomButton(
               onPressed: () {
                 // Navigate to RandomCardPage
                 Navigator.push(
@@ -29,7 +28,7 @@ class HomePage extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => RandomCardPage()),
                 );
               },
-              child: Text('Start'),
+              text: 'START',
             ),
           ],
         ),

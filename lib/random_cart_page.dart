@@ -1,6 +1,7 @@
 import 'dart:async'; // Import for Timer
 import 'dart:math';
 
+import 'package:deck_of_cards/custom_button.dart';
 import 'package:flutter/material.dart';
 
 import 'card_list.dart';
@@ -20,6 +21,9 @@ class _RandomCardPageState extends State<RandomCardPage> {
   int _cardsDone = 0;
   int _cardsToGo = 0;
   int _totalCards = 0;
+  int _repsDone = 0;
+  final int _totalReps =
+      cardList.fold(0, (sum, card) => sum + int.parse(card.value));
   bool _isDone = false; // Track if the deck is done
   bool _isLastCard = false;
 
@@ -36,6 +40,7 @@ class _RandomCardPageState extends State<RandomCardPage> {
     final random = Random();
     final randomIndex = random.nextInt(_currentDeckToGo.length);
     final newCard = _currentDeckToGo[randomIndex];
+    _repsDone += int.parse(_currentCard?.value ?? '0');
 
     setState(() {
       _currentDeckToGo.removeAt(randomIndex);
@@ -60,8 +65,10 @@ class _RandomCardPageState extends State<RandomCardPage> {
       _cardsDone = 0;
       _cardsToGo = cardList.length;
       _totalCards = cardList.length;
+      _repsDone = 0;
       _elapsedTime = 0; // Reset elapsed time
       _isDone = false; // Reset deck status
+      _isLastCard = false;
     });
 
     _goThroughDeck();
@@ -124,10 +131,10 @@ class _RandomCardPageState extends State<RandomCardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF121212), // Set background color
+      backgroundColor: Color(0xFFF3F4F7), // Set background color
       appBar: AppBar(
-        backgroundColor: Color(0xFF121212), // Set background color
-        title: Text('Deck Of Cards', style: TextStyle(color: Colors.white)),
+        backgroundColor: Color(0xFFF3F4F7), // Set background color
+        title: Text('Deck Of Cards', style: TextStyle(color: Colors.black)),
         actions: [
           IconButton(
             icon: Icon(Icons.replay),
@@ -136,17 +143,6 @@ class _RandomCardPageState extends State<RandomCardPage> {
             tooltip: 'Start New Deck',
           ),
         ],
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(20.0),
-          child: Container(
-            child: Center(
-              child: Text(
-                '${_formatTime(_elapsedTime)}',
-                style: TextStyle(fontSize: 30, color: Colors.white),
-              ),
-            ),
-          ),
-        ),
       ),
       body: Center(
         child: Column(
@@ -154,21 +150,41 @@ class _RandomCardPageState extends State<RandomCardPage> {
           children: [
             // PlayingCard count display
             Text(
+              _formatTime(_elapsedTime),
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w400,
+                fontSize: 50,
+              ),
+            ),
+            SizedBox(height: 30), // Space between the buttons
+            Text(
               '$_cardsDone / $_totalCards',
               style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30,
+                  //fontWeight: FontWeight.bold,
+                  fontSize: 40,
                   height: 1,
-                  color: Colors.white),
+                  color: Colors.black),
             ),
+            SizedBox(height: 10), // Space between the buttons
             Text(
-              '$_cardsToGo',
+              'Reps: $_repsDone / $_totalReps',
               style: TextStyle(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w200,
                   fontSize: 30,
                   height: 1,
-                  color: Colors.white),
+                  color: Colors.black),
             ),
+            SizedBox(height: 10), // Space between the buttons
+            Text(
+              'Cards left: $_cardsToGo',
+              style: TextStyle(
+                  fontWeight: FontWeight.w200,
+                  fontSize: 30,
+                  height: 1,
+                  color: Colors.black),
+            ),
+            SizedBox(height: 10), // Space between the buttons
             // Display the card image
             if (_currentCard != null)
               Image.asset(
@@ -184,19 +200,23 @@ class _RandomCardPageState extends State<RandomCardPage> {
               Text(
                 "${_currentCard?.value}",
                 style: TextStyle(
-                    fontWeight: FontWeight.bold,
+                    //fontWeight: FontWeight.bold,
                     fontSize: 50,
-                    color: Colors.white),
+                    color: Colors.black),
               ),
 
             SizedBox(height: 20), // Space between the card value and buttons
 
             // Draw Random PlayingCard Button
-            ElevatedButton(
+            /*  ElevatedButton(
               onPressed: _currentDeckToGo.isEmpty ? null : _goThroughDeck,
               child: Text('Draw Random Card'),
-            ),
-
+            ), */
+            if (!_isLastCard)
+              CustomButton(
+                onPressed: _currentDeckToGo.isEmpty ? null : _goThroughDeck,
+                text: 'DRAW RANDOM',
+              ),
             SizedBox(height: 10), // Space between the buttons
 
             // DONE Button or WELL DONE message
@@ -209,7 +229,7 @@ class _RandomCardPageState extends State<RandomCardPage> {
                     color: Colors.red),
               )
             else if (_isLastCard)
-              ElevatedButton(
+              CustomButton(
                 onPressed: _cardsToGo == 0
                     ? () {
                         setState(() {
@@ -218,7 +238,7 @@ class _RandomCardPageState extends State<RandomCardPage> {
                         });
                       }
                     : null,
-                child: Text('DONE'),
+                text: 'DONE',
               ),
           ],
         ),
