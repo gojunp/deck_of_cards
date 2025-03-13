@@ -19,6 +19,7 @@ class _RandomCardPageState extends State<RandomCardPage> {
   List<PlayingCard> _currentDeckDone = [];
   int _cardsDone = 0;
   int _cardsToGo = 0;
+  int _totalCards = 0;
   bool _isDone = false; // Track if the deck is done
   bool _isLastCard = false;
 
@@ -58,6 +59,7 @@ class _RandomCardPageState extends State<RandomCardPage> {
       _currentDeckDone = [];
       _cardsDone = 0;
       _cardsToGo = cardList.length;
+      _totalCards = cardList.length;
       _elapsedTime = 0; // Reset elapsed time
       _isDone = false; // Reset deck status
     });
@@ -152,7 +154,15 @@ class _RandomCardPageState extends State<RandomCardPage> {
           children: [
             // PlayingCard count display
             Text(
-              '$_cardsDone / $_cardsToGo',
+              '$_cardsDone / $_totalCards',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30,
+                  height: 1,
+                  color: Colors.white),
+            ),
+            Text(
+              '$_cardsToGo',
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 30,
@@ -184,7 +194,7 @@ class _RandomCardPageState extends State<RandomCardPage> {
             // Draw Random PlayingCard Button
             ElevatedButton(
               onPressed: _currentDeckToGo.isEmpty ? null : _goThroughDeck,
-              child: Text('Draw Random PlayingCard'),
+              child: Text('Draw Random Card'),
             ),
 
             SizedBox(height: 10), // Space between the buttons

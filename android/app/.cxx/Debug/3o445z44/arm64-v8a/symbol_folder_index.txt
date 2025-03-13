@@ -1,1 +1,0 @@
-/Users/petargojun/deck_of_cards/build/app/intermediates/cxx/Debug/3o445z44/obj/arm64-v8a
